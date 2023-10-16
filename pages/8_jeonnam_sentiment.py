@@ -1,7 +1,6 @@
-# 전남 전체 - 감성분석 코드
+# 전남 전체 모텔 - 감성분석 코드
 # positive/negative로 분류하여 각 1, -1 점으로 구분
-# 중립단어는 0인데, 중립단어리스트는 재분류가 필요해보임
-
+# 중립단어는 0인데, 중립단어리스트는 재분류했음(수작업)..
 
 import pandas as pd
 from konlpy.tag import Okt
