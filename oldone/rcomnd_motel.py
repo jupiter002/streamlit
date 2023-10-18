@@ -1,3 +1,5 @@
+# 긍정단어가 더 많은 숙소를 기준으로 추천/비추천 숙소 나눈 코드
+
 import pandas as pd
 import json
 from konlpy.tag import Okt
@@ -71,5 +73,5 @@ print(f"평균 부정단어 개수: {avg_negative_words:.2f}")
 # print(f"비추천숙소 개수: {notrcmd_count}")
 
 # JSON으로 저장 (추가)
-with open('../mdata/mchoocheon_or_not.json', 'w', encoding='utf-8') as f:
-    json.dump(recommendation_results, f, ensure_ascii=False, indent=4)
+# with open('../mdata/mchoocheon_or_not.json', 'w', encoding='utf-8') as f:
+#     json.dump(recommendation_results, f, ensure_ascii=False, indent=4)
