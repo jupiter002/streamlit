@@ -1,11 +1,13 @@
+# 1트: 여수만 텍스트마이닝 테스트 해봄
+
+
 import pandas as pd
 from konlpy.tag import Okt
 import streamlit as st
 from collections import Counter
 from wordcloud import WordCloud
 import matplotlib.pyplot as plt
-# import nltk
-# nltk.download()
+
 
 # 단어를 원형으로 바꿔서  변환.. 정렬하기
 
