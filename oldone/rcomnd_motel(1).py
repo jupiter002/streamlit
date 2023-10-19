@@ -8,7 +8,7 @@ import json
 from konlpy.tag import Okt
 
 # 데이터 불러오기
-with open('../data/motel_list_last.json', 'r', encoding='utf-8') as f:
+with open('motel_list_last.json', 'r', encoding='utf-8') as f:
     motel_data = json.load(f)
 
 pos_words = pd.read_csv('../data/positive_dic.csv')
