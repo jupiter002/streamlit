@@ -1,4 +1,4 @@
-# 전남 텍스트마이닝
+# 전남 모텔 텍스트마이닝
 # 전남 모텔정보 json 형식을 가져와서 리뷰내용을 워드클라우드로 분석
 # 형용사만 했지만 텍스트마이닝 결과가 부족해보여 명사도 추가
 # ../data/jeonnam_motel_words_1018.csv 파일로 저장
@@ -16,7 +16,7 @@ st.title('야놀자 전남 모텔 리뷰 워드클라우드 ✏✏')
 
 # 여러 json파일의 경로
 # json_files = ['../mdata/damyang_ghg_motel.json','../mdata/gwangyang_motel.json','../mdata/haenam_wjkjbg_motel.json','../mdata/mokpo_motel.json','../mdata/mooan_sinan_ya_motel.json','../mdata/najoo_hyj_motel.json','../mdata/sooncheon_motel.json','../mdata/yeosu_motel.json']
-json_file = '../data/motel_list_last(1).json'
+json_file = '../data/motel_list_last.json'
 data = pd.read_json(json_file)
 
 

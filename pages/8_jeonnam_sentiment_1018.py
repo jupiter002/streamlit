@@ -7,6 +7,7 @@ import pandas as pd
 from konlpy.tag import Okt
 
 # 데이터 불러오기
+# jeonnam_motel_words_1018.csv 파일은 원형화 된 단어와 빈도만 표기되는 파일임
 mtdata = pd.read_csv('../data/jeonnam_motel_words_1018.csv')
 pos_words = pd.read_csv('../data/positive_dic.csv')
 neg_words = pd.read_csv('../data/negative_dic.csv')
@@ -32,26 +33,6 @@ for text in mtdata['Keyword']:
 # 점수에 따라 감성 판단(긍정: 1, 부정: -1, 중립: 0)
 sentiments = ['positive' if score > 0 else 'negative' if score < 0 else 'neutral' for score in scores]
 
-# # 숙소별 긍정/부정단어 개수 카운팅
-# def get_sentiment_details(mtdata, motel_number, pos_word_list, neg_word_list, okt):
-#     motel_row = mtdata[mtdata['숙소번호'] == motel_number]
-#     if motel_row.empty:
-#         print("해당 숙소번호를 찾을 수 없습니다.")
-#         return
-#
-#     text = motel_row['Keyword'].iloc[0]
-#     tokenized = okt.morphs(text)
-#     pos_keywords = [word for word in tokenized if word in pos_word_list]
-#     neg_keywords = [word for word in tokenized if word in neg_word_list]
-#
-#     print(f"숙소번호 {motel_number}의 긍정단어 개수:", len(pos_keywords))
-#     print(f"숙소번호 {motel_number}의 부정단어 개수:", len(neg_keywords))
-#     print("긍정단어 리스트:", pos_keywords)
-#     print("부정단어 리스트:", neg_keywords)
-#
-# # 원하는 숙소번호로 분석 진행
-# motel_number_to_check = 47  # 예시로 1번 숙소를 지정. 원하는 숫자로 변경 가능
-# get_sentiment_details(mtdata, motel_number_to_check, pos_word_list, neg_word_list, okt)
 
 # 결과 추가
 mtdata['sentiment'] = sentiments
@@ -66,6 +47,6 @@ print(f"긍정적인 단어의 개수: {positive_count}")
 print(f"부정적인 단어의 개수: {negative_count}")
 print(f"중립 단어의 개수: {neutral_count}")
 
-# 결과 출력 및 저장
+# 결과 출력 및 저장(sentiment column이 추가되는 파일
 print(mtdata)
-mtdata.to_csv('../data/output4.csv', index=False)
+mtdata.to_csv('../data/output5_1019.csv', index=False)
