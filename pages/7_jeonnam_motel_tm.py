@@ -54,10 +54,10 @@ def extract_adjectives(text):
     words = []
     for word, tag in tagged:
         if tag == 'Adjective':
-            if word not in stopwords and len(word) > 1:
-                words.append(word)
-            elif len(word) == 1:
+            if len(word) == 1:    # 1글자 단어면 집합에 추가하고, words에는 추가하지 않는다.
                 one_char_words.add(word)
+            elif word not in stopwords:  # 1글자 이상의 단어이면서 불용어에 없으면 words에 추가
+                words.append(word)
     return words
 
 def extract_nouns(text):
@@ -65,10 +65,10 @@ def extract_nouns(text):
     words = []
     for word, tag in tagged:
         if tag == 'Noun':
-            if word not in stopwords and len(word) > 1:
-                words.append(word)
-            elif len(word) == 1:
+            if len(word) == 1:    # 1글자 단어면 집합에 추가하고, words에는 추가하지 않는다.
                 one_char_words.add(word)
+            elif word not in stopwords:  # 1글자 이상의 단어이면서 불용어에 없으면 words에 추가
+                words.append(word)
     return words
 
     # # 명사와 형용사는 추출하고 불용어는 가져오지마
@@ -90,7 +90,7 @@ df_noun = pd.DataFrame(counted_noun.most_common(), columns=['Keyword', 'Frequenc
 merged_df = pd.concat([df_adj, df_noun], axis=0).reset_index(drop=True)
 
 # 합친 데이터프레임을 CSV로 저장
-merged_df.to_csv('../data/jeonnam_motel_words_1018.csv', index=False, encoding='utf-8-sig')
+merged_df.to_csv('../data/jeonnam_motel_2letters.csv', index=False, encoding='utf-8-sig')
 
 # 1글자 짜리 단어를 stopwords-kor.txt 파일에 추가
 with open('../data/stopwords-kor.txt', 'a', encoding='utf-8') as f:

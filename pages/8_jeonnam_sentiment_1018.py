@@ -8,7 +8,7 @@ from konlpy.tag import Okt
 
 # 데이터 불러오기
 # jeonnam_motel_words_1018.csv 파일은 원형화 된 단어와 빈도만 표기되는 파일임
-mtdata = pd.read_csv('../data/jeonnam_motel_words_1018.csv')
+mtdata = pd.read_csv('../data/jeonnam_motel_2letters.csv')
 pos_words = pd.read_csv('../data/positive_dic.csv')
 neg_words = pd.read_csv('../data/negative_dic.csv')
 
@@ -49,4 +49,4 @@ print(f"중립 단어의 개수: {neutral_count}")
 
 # 결과 출력 및 저장(sentiment column이 추가되는 파일
 print(mtdata)
-mtdata.to_csv('../data/output5_1019.csv', index=False)
+mtdata.to_csv('../data/output6_1020.csv', index=False)
