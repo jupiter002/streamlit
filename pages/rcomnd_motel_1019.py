@@ -2,6 +2,8 @@
 # 출력내용: 숙소번호, 모텔명, 숙소별 추천/비추천 구분, 긍정/부정단어 개수, 궁정/부정 비율
 # output 파일(sentiment 열 추가)을 토대로 감성분석하기
 
+# 숙소의 각 리뷰별 긍정/부정 단어 비율로 다시 분류하여 추천기준에 따라 다시 나눔.....
+
 
 import pandas as pd
 import json
@@ -11,7 +13,7 @@ from konlpy.tag import Okt
 with open('../data/motel_list_last.json', 'r', encoding='utf-8') as f:
     motel_data = json.load(f)
 
-senti_data = pd.read_csv('../data/output5_1019.csv')
+senti_data = pd.read_csv('../data/output6_1020.csv')
 
 # pos_word_list, neg_word_list 업데이트
 pos_word_list = senti_data[senti_data['sentiment'] == 'positive']['Keyword'].tolist()
@@ -94,8 +96,8 @@ for motel in motel_data:
         "부정비율" : round(neg_ratio * 100, 2)
     })
 
-for result in rcmd_results:
-    print(result)
+# for result in rcmd_results:
+#     print(result)
 
 
 # 기존 데이터에 각 숙소별 긍정/부정단어 개수와 비율 추가하기
@@ -106,5 +108,5 @@ for motel in motel_data:
 
 # DataFrame으로 변환 후 CSV 파일로 저장
 df = pd.DataFrame(rcmd_results)
-df.to_csv('../data/sookso_level.csv', index=False, encoding='utf-8-sig')
+df.to_csv('../data/sookso_level_1020.csv', index=False, encoding='utf-8-sig')
 
