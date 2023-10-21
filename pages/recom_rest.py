@@ -45,7 +45,7 @@ def getDistanceBetweenPointsNew(latitude1, longitude1, latitude2, longitude2, un
 
 # csv파일에서 축제 좌표값 가져오기
 def getfesdot(fesname):
-    fes = pd.read_csv('C:\\Users\\j\\Documents\\카카오톡 받은 파일\\festival_좌표추가.csv')
+    fes = pd.read_csv('./data/recom_rest/fesJN2023_최종 (1).csv')
     find = fes['축제명'] == fesname
     idx = fes[find]['좌표'].index
 
@@ -66,6 +66,8 @@ def getdistance(fesname):
 
             # 축제로부터 떨어진 숙소의 거리를 지정
             print(distance)
+
+            ### select태그를 사용할때 조건문 ###
             #if select1 == '15km이내':
             #    if distance < 15:
             #        print(data[i]['좌표'], data[i]['모텔명'])
@@ -81,6 +83,7 @@ def getdistance(fesname):
             #        print(data[i]['좌표'], data[i]['모텔명'])
             #        print(distance)
             #        idx.append(i)
+            ### sliderbar를 사용할때 조건문 ###
             if distance <= slider1:
                 print(data[i]['좌표'], data[i]['모텔명'])
                 print(distance)
@@ -92,7 +95,7 @@ def getdistance(fesname):
 
 
 # 축제 csv파일 불러옴
-fes = pd.read_csv('C:\\Users\\j\\Documents\\카카오톡 받은 파일\\fesJN2023_최종 (1).csv')
+fes = pd.read_csv('./data/recom_rest/fesJN2023_최종 (1).csv')
 fes1 = pd.DataFrame(fes,
                     columns=['시군구명','축제명','축제종류',' 개최방식',
                              '시작월','시작일','종료월','종료일','개최주소'])
@@ -122,7 +125,8 @@ st.write('')
 st.write('원하는 거리의 범위를 선택해주세요🚗')
 slider1=st.slider('단위(Km)', 0, 100)
 st.write('선택한 값:', slider1)
-#select1=st.selectbox("(위도,경도로 거리를 계산하기 때문에 오차가 있을 수 있습니다)", ["15km이내", "15km~30km", "30km~40km"])
+#select1=st.selectbox("(위도,경도로 거리를 계산하기 때문에 오차가 있을 수 있습니다)"
+                     #["15km이내", "15km~30km", "30km~40km"])
 
 
 
@@ -132,30 +136,39 @@ select2=st.selectbox("모텔, 펜션중에 선택해주세요🏡", ["모텔", "
 st.write('선택사항:', select2)
 
 
-ps = 'C:\\Users\\j\\Downloads\\ps_list_last.json'
-mt = 'C:\\Users\\j\\Downloads\\motel_list_last (1).json'
+ps = './data/recom_rest/ps_list_last.json'
+mt = './data/recom_rest/motel_list_last (1).json'
+#with open(ps, 'r', encoding='utf-8') as f:
+#    qw = f.read()
+#data = json.loads(qw)
+#data[0]
+
 
 # 모텔을 선택할시
 if select2 == '모텔':
     with open(mt, 'r', encoding='utf-8') as f:
         rest = f.read()
-    rest_csv = pd.read_csv('C:\\Users\\j\\Downloads\\motel_list_last (1).csv')
+    rest_csv = pd.read_csv('./data/recom_rest/motel_list_last (1).csv')
 # 펜션을 선택할시
 else:
     with open(ps, 'r', encoding='utf-8') as f:
         rest = f.read()
-    rest_csv = pd.read_csv('C:\\Users\\j\\Downloads\\ps_list_last.csv')
+    rest_csv = pd.read_csv('./data/recom_rest/ps_list_last.csv')
 
 data = json.loads(rest)
 
 df = pd.DataFrame()
-# 검색한 축제의 좌표를 지도 중앙으로 하기 위해서 가져옴
+
 
 
 #getfesdot('거문도백도은빛바다체험행사')
 #getdistance('거문도백도은빛바다체험행사')
+a = []
 try:
+    # 검색한 축제의 좌표를 지도 중앙으로 하기 위해서 가져옴
     lat, lon = getfesdot(fesname)
+
+
     a = getdistance(fesname)
     # 검색한 축제 근처의 숙소들을 지도에 보여줌
 
@@ -173,10 +186,11 @@ try:
     st.plotly_chart(fig)
 
 except Exception as e:
+    a
     if fesname == '':
         st.warning('어서 축제명을 검색해주세요.현기증 난단 말이예요!😵😵😵')
-    elif fesname != '' and slider1 != 0:
+    elif fesname != '' and slider1 != 0 and len(a) != 0:
         st.error('검색하신 축제명을 다시 확인해주세요(っ°Д°;)っ')
-    elif fesname != '' and slider1 == 0:
+    elif fesname != '' and (slider1 == 0 or len(a) == 0):
         st.error('축제장소에서 숙소까지의 원하는 거리를 선택해주세요')
     print(e)
