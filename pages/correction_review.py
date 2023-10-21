@@ -18,13 +18,8 @@ def correction(text):
         print(f"Error with status code {response.status_code}: {response.text}")
         return text  # 에러 발생시 원본 텍스트 반환
 
-    try:
-        json_str = response.text.split('(', 1)[1].rsplit(')', 1)[0]
-        data = json.loads(json_str)
-        return data['message']['result']['notag_html']
-    except Exception as e:
-        print(f"Error processing the response: {response.text}")
-        return text  # 에러 발생시 원본 텍스트 반환
+    data = response.json()
+    return data['message']['result']['notag_html']
 
 # json 파일에서 후기 가져오기
 with open('../data/ps_list_last.json', 'r', encoding='utf-8') as f:
@@ -44,4 +39,5 @@ with open('../data/ps_list_last.json', 'r', encoding='utf-8') as f:
 # 업데이트된 후기를 다시 JSON 파일에 저장
 with open("../data/ps_list_crtd.json", "w", encoding="utf-8") as f:
     json.dump(data, f, ensure_ascii=False, indent=4)
+
 
