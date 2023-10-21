@@ -1,7 +1,7 @@
-# 전남 모텔 텍스트마이닝
-# 전남 모텔정보 json 형식을 가져와서 리뷰내용을 워드클라우드로 분석
+# 전남 펜션 텍스트마이닝 - ps_list_crtd.json 파일로 진행 : 맞춤법 처리된 파일
+# 전남 펜션정보 json 형식을 가져와서 리뷰내용을 워드클라우드로 분석
 # 형용사만 했지만 텍스트마이닝 결과가 부족해보여 명사도 추가
-# ../data/jeonnam_motel_words_1018.csv 파일로 저장
+# ../data/jeonnam_motel_words_1021.csv 파일로 저장
 
 import pandas as pd
 from konlpy.tag import Okt
@@ -15,8 +15,7 @@ st.sidebar.header('Hello, Jeonnam Motel!!')
 st.title('야놀자 전남 모텔 리뷰 워드클라우드 ✏✏')
 
 # 여러 json파일의 경로
-# json_files = ['../mdata/damyang_ghg_motel.json','../mdata/gwangyang_motel.json','../mdata/haenam_wjkjbg_motel.json','../mdata/mokpo_motel.json','../mdata/mooan_sinan_ya_motel.json','../mdata/najoo_hyj_motel.json','../mdata/sooncheon_motel.json','../mdata/yeosu_motel.json']
-json_file = '../data/ps_list_last.json.json'
+json_file = '../data/ps_list_crtd.json'
 data = pd.read_json(json_file)
 
 
@@ -33,9 +32,6 @@ all_reviews.extend(reviews)
 
 for json_file, count in reviews_counts.items():
     print(f'From {json_file} : {count} reviews')
-
-# 각 지역별 숙소 몇개인지 출력
-#print(f'Total reviews in all_reviews: {len(all_reviews)}')
 
 fontpath = 'c:/Windows/Fonts/malgun.ttf'
 twitter = Okt()
@@ -71,9 +67,6 @@ def extract_nouns(text):
                 one_char_words.add(word)
     return words
 
-    # # 명사와 형용사는 추출하고 불용어는 가져오지마
-    # return [word for word, tag in tagged if tag in ['Noun', 'Adjective'] and word not in stopwords]
-
 all_reviews_text = ' '.join(all_reviews)     # 전체파일에서 리뷰내용 문자열로 연결
 all_adj = extract_adjectives(all_reviews_text)    # 가져온 문자열에서 형용사 추출
 all_noun = extract_nouns(all_reviews_text)    # 가져온 문자열에서 명사 추출
@@ -90,7 +83,7 @@ df_noun = pd.DataFrame(counted_noun.most_common(), columns=['Keyword', 'Frequenc
 merged_df = pd.concat([df_adj, df_noun], axis=0).reset_index(drop=True)
 
 # 합친 데이터프레임을 CSV로 저장
-merged_df.to_csv('../data/jeonnam_motel_words_1018.csv', index=False, encoding='utf-8-sig')
+merged_df.to_csv('../data/jeonnam_ps_words_1021.csv', index=False, encoding='utf-8-sig')
 
 # 1글자 짜리 단어를 stopwords-kor.txt 파일에 추가
 with open('../data/stopwords-kor.txt', 'a', encoding='utf-8') as f:
