@@ -1,14 +1,16 @@
 # 긍정/부정단어 개수 카운팅
-# 전남 전체 모텔 - 감성분석 코드
+# 전남 전체 펜션- 감성분석 코드
 # positive/negative로 분류하여 각 1, -1 점으로 구분
 # 중립단어는 0인데, 긍정/부정 분류가 정확한 단어가 0으로 되어있는 경우가 많아서 중립단어리스트는 재분류했음(수작업)..
+# 불용어 처리 된 버전/ 안된 버전으로 감성분석
+
 
 import pandas as pd
 from konlpy.tag import Okt
 
 # 데이터 불러오기
 # jeonnam_motel_words_1018.csv 파일은 원형화 된 단어와 빈도만 표기되는 파일임
-mtdata = pd.read_csv('../data/jeonnam_motel_words_.csv')
+mtdata = pd.read_csv('../data/jeonnam_ps_words_1021.csv')
 pos_words = pd.read_csv('../data/positive_dic.csv')
 neg_words = pd.read_csv('../data/negative_dic.csv')
 
@@ -49,4 +51,4 @@ print(f"중립 단어의 개수: {neutral_count}")
 
 # 결과 출력 및 저장(sentiment column이 추가되는 파일
 print(mtdata)
-mtdata.to_csv('../data/output5_1019.csv', index=False)
+mtdata.to_csv('../data/output8_1021.csv', index=False)
