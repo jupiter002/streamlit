@@ -7,6 +7,7 @@ import json
 
 from numpy import sin, cos, arccos, pi, round
 
+
 # 멀티 페이지용 제목
 st.set_page_config(page_title='안녕하세요! 당신의 숙소추천서비스 숙천이입니다. 🌏🌏🌏',
                    page_icon='╰(*°▽°*)╯╰(*°▽°*)╯╰(*°▽°*)╯')
@@ -95,7 +96,7 @@ def getdistance(fesname):
 #    print(i[0])
 
 # 축제 csv파일 불러옴
-fes = pd.read_csv('./data/recom_rest/fesJN2023_최종 (1)좌표수정X.csv')
+fes = pd.read_csv('./data/recom_rest/fesJN2023_최종 (1).csv')
 fes1 = pd.DataFrame(fes,columns=['시군구명','축제명','축제종류',
                     '개최방식','시작월','시작일','종료월','종료일','개최주소'])
 
