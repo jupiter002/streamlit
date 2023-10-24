@@ -1,19 +1,11 @@
-import numpy as np
 import pandas as pd
-import matplotlib.pyplot as plt
-import seaborn as sns
 
 import streamlit as st
-import altair as alt
 import plotly.express as px
-from bokeh.plotting import figure
 
 import json
-import plotly.graph_objects as go
-from IPython.display import display
 
 from numpy import sin, cos, arccos, pi, round
-
 
 # 멀티 페이지용 제목
 st.set_page_config(page_title='안녕하세요! 당신의 숙소추천서비스 숙천이입니다. 🌏🌏🌏',
@@ -67,7 +59,6 @@ def getdistance(fesname):
             distance = getDistanceBetweenPointsNew(x_1, y_1, x_2, y_2)
 
             # 축제로부터 떨어진 숙소의 거리를 지정
-            #print(distance)
 
             ### select태그를 사용할때 조건문 ###
             #if select1 == '15km이내':
@@ -88,10 +79,10 @@ def getdistance(fesname):
             ### sliderbar를 사용할때 조건문 ###
             if distance <= slider1:
                 #print(data[i]['좌표'], data[i]['모텔명'])
-                #print(distance)
                 idx = []
                 idx.append(i)
                 idx.append(distance)
+
                 rest_list.append(idx)
                 result_list = sorted(rest_list, key=lambda x: x[1])
         except Exception as e:
@@ -99,12 +90,12 @@ def getdistance(fesname):
     # 원하는 거리만큼 떨어진 숙소데이터의 인덱스 반환
     return result_list
 
-#a = getdistance('구례산수유꽃축제')
+
 #for i in a:
 #    print(i[0])
 
 # 축제 csv파일 불러옴
-fes = pd.read_csv('./data/recom_rest/fesJN2023_최종 (1).csv')
+fes = pd.read_csv('./data/recom_rest/fesJN2023_최종 (1)좌표수정X.csv')
 fes1 = pd.DataFrame(fes,columns=['시군구명','축제명','축제종류',
                     '개최방식','시작월','시작일','종료월','종료일','개최주소'])
 
@@ -120,17 +111,7 @@ fig.update_layout(mapbox_zoom=7.5, width=800, height=600, mapbox_center={"lat": 
 st.plotly_chart(fig)
 
 
-
 st.write('축제가 열리는 달을 선택해주세요🗓️')
-
-
-
-#tab1=st.tabs(["1월","2월","3월","4월","5월","6월","7월","8월","9월","10월","11월","12월",])
-#st.write(f'{tab1}월을 선택하셨어요!')
-
-#select_month = 0
-#with tab1:
-#    select_month = 1
 
 
 select_month = st.slider('',1,12)
@@ -141,7 +122,7 @@ find = fes1['시작월'] == select_month
 
 st.write(f'🎆{select_month}월의 축제리스트🎆')
 
-fes2 = fes1.sort_values(by='축제명', key=lambda x: x.str.encode('utf-8'))
+fes2 = fes1.sort_values(by='축제종류', ascending=False, key=lambda x: x.str.encode('utf-8'))
 fes2[find]
 
 
@@ -151,9 +132,10 @@ st.write('입력내용:', fesname)
 
 st.write('')
 
-st.write('원하는 거리의 범위를 선택해주세요🚗')
-slider1=st.slider('단위(Km)', 0, 100)
-st.write(f'선택한 거리범위는 0km ~ {slider1}km입니다')
+st.write('''원하는 거리의 범위를 선택해주세요🚗\n
+(축제장소와 숙소의 직선 거리로 거리계산을 하기 때문에 오차가 있을 수 있습니다.)''')
+slider1=st.slider('단위(Km)', 0, 40)
+st.write(f'선택한 거리범위는 1km ~ {slider1}km입니다')
 
 #select1=st.selectbox("(위도,경도로 거리를 계산하기 때문에 오차가 있을 수 있습니다)"
                      #["15km이내", "15km~30km", "30km~40km"])
@@ -174,21 +156,28 @@ if select2 == '모텔':
     with open(mt, 'r', encoding='utf-8') as f:
         rest = f.read()
     rest_csv = pd.read_csv('./data/recom_rest/motel_list_last.csv')
+    recom_rest = pd.read_csv('./data/recom_rest/모텔_list_추천여부최종최종.csv')
+
 # 펜션을 선택할시
 else:
     with open(ps, 'r', encoding='utf-8') as f:
         rest = f.read()
     rest_csv = pd.read_csv('./data/recom_rest/ps_list_last.csv')
+    recom_rest = pd.read_csv('./data/recom_rest/펜션_list_추천여부최종최종.csv')
 
 data = json.loads(rest)
 
-df = pd.DataFrame()
+
+st.write('')
+
+st.write('숙소를 고를 때 중요하게 생각하시는 걸 선택해주세요👆')
+select_crit = st.selectbox('',['추천순', '친절도', '청결도', '편의성', '비품만족도/주변여행'])
 
 
 
-#getfesdot('거문도백도은빛바다체험행사')
-#getdistance('거문도백도은빛바다체험행사')
+
 a = []
+df = pd.DataFrame()
 try:
     # 검색한 축제의 좌표를 지도 중앙으로 하기 위해서 가져옴
     lat, lon = getfesdot(fesname)
@@ -200,9 +189,14 @@ try:
 
     for idx in a:
         df = df._append(rest_csv.iloc[idx[0]], ignore_index=True)
+    result = pd.merge(df,recom_rest, on='모텔명')
+    result
+    result1 = pd.DataFrame(result,columns=['모텔명','주소_x','추천여부_최종','좌표/위도','좌표/경도','주소']).sort_values(by='추천여부_최종', ascending=False)
+    find = result1['추천여부_최종'] > 3
+    result1[find]
 
 
-    fig = px.scatter_mapbox(df, lat='좌표/위도', lon='좌표/경도', size='전체평점', color='모텔명',
+    fig = px.scatter_mapbox(result1[find], lat='좌표/위도', lon='좌표/경도', size='추천여부_최종', color='모텔명',
                             color_continuous_scale= px.colors.sequential.RdBu,
                             mapbox_style='open-street-map',
                             hover_name= '모텔명', hover_data={'좌표/위도':False,'좌표/경도':False,'모텔명':True, '주소':True},
@@ -218,8 +212,5 @@ except Exception as e:
         st.error('🤘검색하신 축제명을 다시 확인해주세요! OOPS!!!🤘')
     elif fesname != '' and (slider1 == 0 or len(a) == 0):
         st.error('축제장소에서 숙소까지의 원하는 거리를 선택해주세요')
-    else:
-        st.write('해당범위내에 숙소가 없습니다. 거리범위를 다시 선택해주세요')
-
 
 
